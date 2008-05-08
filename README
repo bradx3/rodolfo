@@ -1,0 +1,13 @@
+Rodolfo is a simple SQLite3 db viewer for OSX. 
+
+It requires the sqlite3-ruby gem installed.
+
+
+At the moment Rodolfo:
+Views SQLite3 tables and data
+
+
+Rodolfo does not:
+View SQLite2 databases
+Edit data
+Allow custom sql queries
