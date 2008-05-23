@@ -124,17 +124,22 @@ class MyDocument < NSDocument
 	# Return all tables in the current db
 	###
 	def load_table_names
-		db = SQLite3::Database.new(@file, :results_as_hash => false, :type_translation => false) 
-		db.busy_timeout(100)
-		result = db.execute2("select name from sqlite_master where type in ('table', 'view') and name not like 'sqlite_%' order by name")
-		result.shift # throw away columns
+		begin
+			db = SQLite3::Database.new(@file, :results_as_hash => false, :type_translation => false) 
+			db.busy_timeout(100)
+			result = db.execute2("select name from sqlite_master where type in ('table', 'view') and name not like 'sqlite_%' order by name")
+			result.shift # throw away columns
 
-		@table_names = result.inject([]) do |array, row|
-			name = row.first
-			str = NSMutableString.alloc.initWithCapacity(name.length)
-			str.setString(name)
-			array << str
+			@table_names = result.inject([]) do |array, row|
+				name = row.first
+				str = NSMutableString.alloc.initWithCapacity(name.length)
+				str.setString(name)
+				array << str
+			end
+		rescue SQLite3::SQLException => e
+			puts e
 		end
+		
 		db.close
 	end
 	
